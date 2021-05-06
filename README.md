@@ -26,6 +26,3 @@ The dashboard reflecting the actual data will be published on AWS after some mod
 ### 서버 (Server)
 - will be changed from AWS ec2 to AWS lightsail
 
-## 로컬 서버에서 보기
-
-1. 
