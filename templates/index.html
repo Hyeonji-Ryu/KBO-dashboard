@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+
+{% block head %}
+{{ super() }}
+<style>
+body {
+  padding-top: 56px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <!-- Heading Row -->
+    <div class="row align-items-center my-5">
+      <div class="col-lg-7">
+        <img class="img-fluid rounded mb-4 mb-lg-0" src="static/main.png" alt="">
+      </div>
+      <!-- /.col-lg-8 -->
+      <div class="col-lg-5">
+        <h1 class="font-weight-light">Welcome to KBO!</h1>
+        <Br/>
+        <p>KBO란 Korea Baseball Organization의 약자로 한국프로야구를 의미합니다. <Br/>
+            해당 사이트에서는 KBO 데이터를 크롤링하여 분석한 결과를 보기 쉽게 제공합니다. <Br/>
+            아래의 버튼을 통해 KBO 공식 사이트에 직접 방문할 수 있습니다.</p>
+        <Br/>
+        <a class="btn btn-dark" href="https://www.koreabaseball.com/Default.aspx">KBO 공식 사이트</a>
+      </div>
+      <!-- /.col-md-4 -->
+    </div>
+    <!-- /.row -->
+
+    <!-- Call to Action Well -->
+    <div class="card text-white bg-secondary my-5 py-3 text-center">
+      <div class="card-body">
+        <h5 class="card-title m-0">팀이나 선수들의 분석을 바탕으로 비교해보고 싶다면?</h5>
+        <Br>
+        <h2 class="card-title m-0">아래의 버튼을 클릭하여 비교해보자!</h2>
+        <br>
+        <a class="btn btn-secondary btn-lg btn-outline-light" href="/comparer/">Go to Compare</a>
+      </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-5">
+          <div class="card h-80">
+            <img class="card-img-top" src="static/team.jpg" alt="">
+            <div class="card-body">
+              <h4 class="card-title">KBO 야구팀의 추세는?</h4>
+              <p class="card-text">해당 보고서에서는 팀 각각의 승률을 시계열로 분석하여 파악한 팀들의 추세를 확인할 수 있습니다.</p>
+            </div>
+            <div class="card-footer">
+              <a href="/teams/" class="btn btn-dark">팀 분석 보고서</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-5">
+          <div class="card h-100">
+            <img class="card-img-top" src="static/pitcher.jpg" alt="">
+            <div class="card-body">
+              <h4 class="card-title">투수 스탯, 그것이 알고 싶다!</h4>
+              <p class="card-text">가장 어려운 투수 능력 평가, 해당 보고서에서 편하게 확인할 수 있습니다.</p>
+            </div>
+            <div class="card-footer">
+              <a href="/pitchers/" class="btn btn-dark">투수 분석 보고서</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 mb-5">
+            <div class="card h-80">
+              <img class="card-img-top" src="static/player.jpg" alt="">
+              <div class="card-body">
+                <h4 class="card-title">나의 최애 타자의 스탯이 궁금하다면?</h4>
+                <p class="card-text">모든 선수들의 승률이나 타율 등의 정보를 끌어모아 분석한 결과를 확인할 수 있습니다.</p>
+              </div>
+              <div class="card-footer">
+                <a href="/batters/" class="btn btn-dark">타자 분석 보고서</a>
+              </div>
+            </div>
+          </div>
+      </div>
+    </div>
+</div>
+
+ <!-- Footer -->
+ <footer class="py-4 bg-dark">
+    <div class="container">
+      <p class="m-0 text-center text-white">Copyright &copy; Jess Ryu 2020</p>
+    </div>
+    <!-- /.container -->
+  </footer>
+{% endblock %}
