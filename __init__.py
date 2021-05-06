@@ -1,10 +1,5 @@
 import flask
 from flask import Flask, render_template, session, redirect, url_for, flash
-from flask_wtf import Form
-from flask_wtf import FlaskForm
-from wtforms import widgets, SelectMultipleField
-from wtforms import StringField, SubmitField
-from wtforms.validators import Required
 from flask_bootstrap5 import Bootstrap5
 import dash
 import dash_html_components as html
