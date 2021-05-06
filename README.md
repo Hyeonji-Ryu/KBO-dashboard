@@ -2,6 +2,8 @@
 
 ## 한국야구위원회 데이터 분석 대시보드 (KBO analytical dashboard)
 
+![git](https://user-images.githubusercontent.com/42489770/117327030-2b205500-aecd-11eb-937f-438108cbbee3.jpg)
+
 위 대시보드는 KBO 프로젝트에서 크롤링으로 얻은 데이터를 시각화하기 위해 만들었습니다.  
 I made this dashboard to visualize the data obtained by crawling from the KBO project.  
 
