@@ -26,3 +26,5 @@ The dashboard updating the actual data will be published on AWS after some modif
 ### 서버 (Server)
 - will be changed from AWS ec2 to AWS lightsail
 
+### 데이터베이스 (Database)
+- mariaDB
