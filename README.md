@@ -11,7 +11,7 @@ I made this dashboard to visualize the data obtained by crawling from KBO projec
 The sqlite file in the source code is a temporary database for testing, So visualized graphs are meaningless.
 
 실제 데이터를 반영한 대시보드는 몇 가지 수정을 거친 후 AWS에 배포할 예정입니다.   
-The dashboard updating the actual data will be published on AWS after some modifications.  
+The dashboard updated the actual data will be published on AWS after some modifications.  
 
 ### 웹 프레임워크 (Web Framework)
 - Flask
