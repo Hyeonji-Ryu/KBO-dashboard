@@ -1,12 +1,10 @@
-## requirement.py
-
-pip install flask
-pip install sqlalchemy
-pip install pandas
-pip install plotly
-pip install dash
-pip install dash_bootstrap_components
-pip install pymysql
-pip install pyarrow
-pip install dominate
-pip install visitor
+flask
+sqlalchemy
+pandas
+plotly
+dash
+dash_bootstrap_components
+pymysql
+pyarrow
+dominate
+visitor
