@@ -8,8 +8,8 @@ I made this dashboard to visualize the data obtained by crawling from KBO projec
 공개한 소스 코드에 포함된 sqlite 파일은 테스트를 위한 임시 데이터베이스이기에 시각화된 그래프 또한 통계적 의미는 없습니다.
 The sqlite file in the source code is a temporary database for testing, So visualized graphs are meaningless.
 
-실제 데이터를 반영한 대시보드는 [여기](http://kbo.lopes.co.kr/)서 볼 수 있습니다.
-You can see the dashboard that is updated the actual data [this page](http://kbo.lopes.co.kr/).
+실제 데이터를 반영한 대시보드는 [여기](http://kbo.lopes.co.kr/)서 볼 수 있습니다.  
+You can see the dashboard that is updated the actual data [this page](http://kbo.lopes.co.kr/).  
 
 ### 웹 프레임워크 (Web Framework)
 - Flask
