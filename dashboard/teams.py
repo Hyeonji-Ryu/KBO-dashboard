@@ -7,21 +7,21 @@ from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 import plotly.express as px
 import plotly.figure_factory as ff
-from module.dbmodule import team_win_table, month_win_prop, home_visit_prop, team_win_porb
+from module.module import team_win_table, month_win_prob, home_visit_prob, team_win_prob
 from dashboard.base import baselayout
 from plotly.subplots import make_subplots
 
 def Team_Base_layout(app):
 
     app.title = "KBO analysis"
-    team_name = ['SK','기아','두산','한화','LG','삼성','키움','롯데', 'NC','KT']
+    team_name = ['SK','KIA','두산','한화','LG','삼성','키움','롯데','NC','KT','SSG']
 
     app.layout = html.Div([
         baselayout,
         # 그래프
         dbc.Container([
             dbc.Row(dbc.Col(children=[html.H2("팀을 선택해 주세요")], style={'margin-top':80, 'margin-right':10,'margin-left':10},id="title")),
-            dbc.Row(dbc.Col(dbc.Alert("해당 분석은 한국프로야구단 공식 홈페이지인 KBO에서 크롤링한 데이터를 바탕으로 진행되었습니다.", color="secondary", style={'margin-top':10, 'margin-right':10,'margin-left':10}))),
+            dbc.Row(dbc.Col(dbc.Alert("해당 분석은 한국프로야구단 공식 홈페이지인 KBO에서 스크래핑한 데이터를 바탕으로 진행되었습니다.", color="secondary", style={'margin-top':10, 'margin-right':10,'margin-left':10}))),
             dbc.Row([
                     dbc.Col(
                         dbc.Card([
@@ -74,7 +74,7 @@ def Team_Base_layout(app):
                          xs=12, sm=12, md=6, lg=6),
                  dbc.Col(
                     dbc.Card([
-                        dbc.CardHeader("구단별 1:1 승률"),
+                        dbc.CardHeader("구단별 누적 1:1 승률"),
                         dbc.CardBody(dcc.Graph(id='map_graph', hoverData={'points': [{'year': 'prop'}]}))
                         ], style={'width':"auto",'margin-top':20, 'margin-right':10,'margin-left':10,'margin-bottom':20}),
                          xs=12, sm=12, md=6, lg=6),
@@ -184,8 +184,8 @@ def Team_Base_layout(app):
             Output('card2','children'),
             Input('team_name_select', 'value'))
     def update_output(value):
-        prop = month_win_prop(value)
-        fig = go.Figure(go.Bar(x=[3,4,5,6,7,8,9,10], y=prop, marker_color='#6E757C', text=prop))
+        month, prop = month_win_prob(value)
+        fig = go.Figure(go.Bar(x=month, y=prop, marker_color='#6E757C', text=prop))
         fig.update_traces(texttemplate='%{text:.2f}', textposition='outside')
         fig.update_layout(
             margin=dict(l=0, r=0, t=0, b=0),
@@ -198,7 +198,7 @@ def Team_Base_layout(app):
             children = [html.H5('균일한 승률')]
         elif value != 'team_select' and value != None and prop.index(max(prop)) in [0,1,2,3]:
             children = [html.H5('전반전 강자')]
-        elif value != 'team_select' and value != None and prop.index(max(prop)) in [4,5,6,7]:
+        elif value != 'team_select' and value != None and prop.index(max(prop)) in [4,5,6,7,8]:
             children = [html.H5('후반전 강자')]
         else: children=[html.H5("None")]
         return fig, children
@@ -208,12 +208,12 @@ def Team_Base_layout(app):
             Output('card3','children'),
             Input('team_name_select', 'value'))
     def update_pie(value):
-        home_df, visit_df, num = home_visit_prop(value)
+        home_df, visit_df, num = home_visit_prob(value)
         label = ['lose', 'draw','win']
         night_colors = ['rgb(56, 75, 126)', 'rgb(18, 36, 37)', 'rgb(34, 53, 101)']
         specs = [[{'type':'domain'}, {'type':'domain'}]]
         if value != 'team_select' and value != None:
-            temp=['HOME', 'VISIT']
+            temp=['HOME', 'AWAY']
         else: temp=[]
         fig = make_subplots(rows=1, cols=2, specs = specs, subplot_titles=temp)
         fig.add_trace(go.Pie(labels=label, values=home_df['score'], hole=.3, marker_colors=night_colors),1,1)
@@ -237,7 +237,7 @@ def Team_Base_layout(app):
             Output('card4','children'),
             Input('team_name_select', 'value'))
     def update_output(value):
-        df=team_win_porb(value)
+        df=team_win_prob(value)
         fig = px.scatter_mapbox(df, lat="lat", lon="lon", hover_name="team",color = "prop",size="prop", 
                     color_continuous_scale=px.colors.sequential.Cividis,size_max=20, zoom=5, height=300)
         fig.update_layout(mapbox_style="carto-positron", margin={"r":0,"t":0,"l":0,"b":0})

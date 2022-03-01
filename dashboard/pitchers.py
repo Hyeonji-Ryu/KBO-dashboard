@@ -6,14 +6,14 @@ import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-from module.dbmodule import pitcher_list, count_year, pitcher_yearly_base, pitcher_prop
+from module.module import pitcher_list, count_year, pitcher_prop, pitcher_yearly_base, get_team_name
 from dashboard.base import baselayout
 
 def Pitcher_Base_layout(app):
 
     app.title = "KBO analysis"
-    team_name = ['SK','기아','두산','한화','LG','삼성','키움','롯데', 'NC','KT']
     year = count_year()
+    team_name = []
     pitcher_name = []
 
     app.layout = html.Div([
@@ -21,7 +21,7 @@ def Pitcher_Base_layout(app):
         # 그래프
         dbc.Container([
             dbc.Row(dbc.Col(children=[html.H2("선수를 선택해 주세요")], style={'margin-top':80, 'margin-right':10,'margin-left':10},id="title")),
-            dbc.Row(dbc.Col(dbc.Alert("해당 분석은 한국프로야구단 공식 홈페이지인 KBO에서 크롤링한 데이터를 바탕으로 진행되었습니다.", color="secondary", style={'margin-top':10, 'margin-right':10,'margin-left':10}))),
+            dbc.Row(dbc.Col(dbc.Alert("해당 분석은 한국프로야구단 공식 홈페이지인 KBO에서 스크래핑한 데이터를 바탕으로 진행되었습니다.", color="secondary", style={'margin-top':10, 'margin-right':10,'margin-left':10}))),
             dbc.Row([
                 dbc.Col(children=[
                         dbc.Card([
@@ -128,6 +128,13 @@ def Pitcher_Base_layout(app):
     ])
 
     @app.callback(
+        Output('team_name_select', "options"),
+        Input('year_select', "value"))
+    def team_name_list(value): 
+        team_name = get_team_name(value)
+        return [{'label': i, 'value': i} for i in team_name]
+
+    @app.callback(
         Output('pitcher_name_select', "options"),
         [Input('year_select', "value"), Input('team_name_select', "value")])
     def pitcher_name_list(value1, value2):
@@ -170,9 +177,9 @@ def Pitcher_Base_layout(app):
     @app.callback(
         Output("graph1", "figure"),
         Output("graph2", "figure"),
-        Input('pitcher_name_select', "value"))
-    def pitcher_stat(value):
-        scores, df = pitcher_yearly_base(value)
+        [Input('team_name_select', "value"),Input('pitcher_name_select', "value")])
+    def pitcher_stat(value1, value2):
+        scores, df = pitcher_yearly_base(value1, value2)
         fig1 = go.Figure(go.Bar(
             x=scores[-1][3:],
             y=['평균실점(RA9) ','평균자책점(ERA) ','수비무관투구(FIP) '],
@@ -201,9 +208,9 @@ def Pitcher_Base_layout(app):
 
     @app.callback(
         Output("graph3", "figure"),
-        Input('pitcher_name_select', "value"))
-    def pitcher_graph(value):
-        temp = pitcher_prop(value)
+        [Input('team_name_select', "value"),Input('pitcher_name_select', "value")])
+    def pitcher_graph(value1,value2):
+        temp = pitcher_prop(value1,value2)
         fig = go.Figure()
         fig.add_trace(go.Scatter(x = temp['date'],y = temp['OBP'],mode='markers', name = '피출루율(OBP)',
             marker=dict(size=10, color=temp['OBP'], colorscale='Viridis',showscale=True)))

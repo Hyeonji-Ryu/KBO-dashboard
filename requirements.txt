@@ -3,8 +3,8 @@ sqlalchemy
 pandas
 plotly
 dash
-dash_bootstrap_components
+dash_bootstrap_components==0.13
 pymysql
-pyarrow
+pyarrow==0.16.0
 dominate
 visitor

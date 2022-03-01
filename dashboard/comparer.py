@@ -7,13 +7,13 @@ from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
 from dashboard.base import baselayout
 from plotly.subplots import make_subplots
-from module.dbmodule import team_win_table, month_win_prop, count_year, pitcher_names, batter_names, batter_yearly_base, pitcher_yearly_base
+from module.module import month_win_prop, team_win_table, c_batter_yearly_base, c_pitcher_yearly_base, count_year, pitcher_names, batter_names
 import pandas as pd
 
 def Comparer_Base_layout(app):
 
     app.title = "KBO analysis"
-    team_name = ['SK','기아','두산','한화','LG','삼성','키움','롯데', 'NC','KT']
+    team_name = ['SSG','SK','기아','두산','한화','LG','삼성','키움','롯데', 'NC','KT']
     year = count_year()
     batter_name = []
     pitcher_name = []
@@ -23,7 +23,7 @@ def Comparer_Base_layout(app):
         baselayout,
         # 그래프
         dbc.Container([
-            dbc.Row(dbc.Col(dbc.Alert("해당 분석은 한국프로야구단 공식 홈페이지인 KBO에서 크롤링한 데이터를 바탕으로 진행되었습니다.", color="secondary", style={'margin-top':80, 'margin-right':10,'margin-left':10}))),
+            dbc.Row(dbc.Col(dbc.Alert("해당 분석은 한국프로야구단 공식 홈페이지인 KBO에서 스크래핑한 데이터를 바탕으로 진행되었습니다.", color="secondary", style={'margin-top':80, 'margin-right':10,'margin-left':10}))),
             dbc.Row([
                 dbc.Col(children=[
                         dbc.Card([
@@ -33,8 +33,8 @@ def Comparer_Base_layout(app):
                                     id='team_name_select',
                                     value = '',
                                     options=[{'label': i, 'value': i} for i in team_name],
-                                    inputStyle={'margin-right':'4px','margin-left':'4px'},
-                                    labelStyle={'margin-right':'9px','margin-left':'9px'})
+                                    inputStyle={'margin-right':'2px','margin-left':'2px'},
+                                    labelStyle={'margin-right':'7px','margin-left':'7px'})
                             ),
                             ],color="light", style={'width':"auto",'margin-top':20, 'margin-left':10,'margin-right':10,'margin-bottom':20}),
                         dbc.CardColumns([
@@ -209,15 +209,15 @@ def Comparer_Base_layout(app):
             df = pd.DataFrame(columns = ['NAME', 'AVG', 'OBP', 'SLG', 'ISO', 'EOBP'])
             if len(value)==0 : value =['']
             for i in range(len(value)):
-                scores = batter_yearly_base(value[i])
+                scores = c_batter_yearly_base(value[i])
                 df.loc[i] = scores[-1]
-                df.replace(2020,value[i],inplace=True)
+                df.replace(scores[-1][0],value[i],inplace=True)
                 fig.add_trace(go.Scatterpolar(r= list(scores[-1][1:]),opacity= 0.7,
                     theta=[' 평균타율(AVG) ',' 출루율(OBP) ',' 장타율(SGL) ',' 순장타율(ISO) ', ' 순출루율(EOBP) '],
                     fill='toself', name=value[i]),1,1)
             fig.add_trace(go.Table(
                 header=dict(values=df.columns,height=32, fill_color='#6E757C',line_color='#6E757C',align='center',font=dict(color='white')),
-                cells=dict(values=[df.NAME,df.AVG, df.OBP, df.SLG, df.ISO, df.EOBP],fill_color='white', line_color='#6E757C',font=dict(color='black'),align='center', height=32)),2,1)
+                cells=dict(values=[df.NAME, df.AVG, df.OBP, df.SLG, df.ISO, df.EOBP],fill_color='white', line_color='#6E757C',font=dict(color='black'),align='center', height=32)),2,1)
             fig.update_layout(height=610,margin=dict(l=0, r=0, t=35, b=0),template = None,
                 polar = dict(
                     radialaxis = dict(visible=True,showticklabels=False, ticks=''),
@@ -229,9 +229,9 @@ def Comparer_Base_layout(app):
             df = pd.DataFrame(columns = ['NAME','AVG','OBP','RA9','ERA','FIP'])
             if len(value)==0 : value =['']
             for i in range(len(value)):
-                scores, temp = pitcher_yearly_base(value[i])
+                scores, temp = c_pitcher_yearly_base(value[i])
                 df.loc[i] = scores[-1]
-                df.replace(2020,value[i],inplace=True)
+                df.replace(scores[-1][0],value[i],inplace=True)
                 df.replace(float('inf'),0,inplace=True)
                 df= df.fillna(0)
                 fig.add_trace(go.Scatterpolar(r= list(scores[-1][1:]),opacity= 0.7,

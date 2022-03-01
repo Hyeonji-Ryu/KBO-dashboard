@@ -5,7 +5,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 from dash.dependencies import Input, Output, State
 import plotly.graph_objects as go
-from module.dbmodule import batter_list, count_year, batter_yearly_base, daily_hit_prob
+from module.module import count_year, batter_list, daily_hit_prob, batter_yearly_base, get_team_name
 from dashboard.base import baselayout
 from plotly.subplots import make_subplots
 import pandas as pd
@@ -13,7 +13,7 @@ import pandas as pd
 def Batter_Base_layout(app):
 
     app.title = "KBO analysis"
-    team_name = ['SK','기아','두산','한화','LG','삼성','키움','롯데', 'NC','KT']
+    team_name = []
     year = count_year()
     batter_name = []
 
@@ -22,7 +22,7 @@ def Batter_Base_layout(app):
         # 그래프
         dbc.Container([
             dbc.Row(dbc.Col(children=[html.H2("선수를 선택해 주세요")], style={'margin-top':80, 'margin-right':10,'margin-left':10},id="title")),
-            dbc.Row(dbc.Col(dbc.Alert("해당 분석은 한국프로야구단 공식 홈페이지인 KBO에서 크롤링한 데이터를 바탕으로 진행되었습니다.", color="secondary", style={'margin-top':10, 'margin-right':10,'margin-left':10}))),
+            dbc.Row(dbc.Col(dbc.Alert("해당 분석은 한국프로야구단 공식 홈페이지인 KBO에서 스크래핑한 데이터를 바탕으로 진행되었습니다.", color="secondary", style={'margin-top':10, 'margin-right':10,'margin-left':10}))),
             dbc.Row([
                 dbc.Col(children=[
                         dbc.Card([
@@ -129,6 +129,13 @@ def Batter_Base_layout(app):
     ])
 
     @app.callback(
+        Output('team_name_select', "options"),
+        Input('year_select', "value"))
+    def team_name_list(value): 
+        team_name = get_team_name(value)
+        return [{'label': i, 'value': i} for i in team_name]
+
+    @app.callback(
         Output('batter_name_select', "options"),
         [Input('year_select', "value"), Input('team_name_select', "value")])
     def batter_name_list(value1, value2): 
@@ -155,9 +162,9 @@ def Batter_Base_layout(app):
     @app.callback(
             Output('graph1', 'figure'),
             Output('graph2', 'figure'),
-            Input('batter_name_select', 'value'))
-    def batter_recent(value):
-        scores = batter_yearly_base(value)
+            [Input('team_name_select', "value"),Input('batter_name_select', 'value')])
+    def batter_recent(value1,value2):
+        scores = batter_yearly_base(value1,value2)
         df = pd.DataFrame(scores[1:], columns = ['YEAR', 'AVG', 'OBP', 'SLG', 'ISO', 'EOBP'])
         fig1 = go.Figure(go.Scatterpolar(r= list(scores[-1][1:]),
             theta=['평균타율(AVG)','출루율(OBP)','장타율(SGL)','순장타율(ISO)', '순출루율(EOBP)'],
@@ -187,9 +194,9 @@ def Batter_Base_layout(app):
 
     @app.callback(
             Output('graph3', 'figure'),
-            Input('batter_name_select', 'value'))
-    def batter_monthly(value):
-        df= daily_hit_prob(value)
+            [Input('team_name_select', "value"),Input('batter_name_select', 'value')])
+    def batter_monthly(value1,value2):
+        df= daily_hit_prob(value1,value2)
         fig = go.Figure(go.Scatter(
             x = df['date'],y = df['value'],mode='markers',
             marker=dict(size=10,color=df['value'].astype('float'),colorscale="viridis",showscale=True)))

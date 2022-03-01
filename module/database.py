@@ -12,7 +12,3 @@ DB_SESSION = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind
 # 데이터베이스와 연결할 가본 클래스 생성
 Base = declarative_base()
 Base.query = DB_SESSION.query_property()
-
-def init_db():
-    """ 테이블을 생성해주는 함수 """
-    Base.metadata.create_all(ENGINE)
