@@ -13,7 +13,7 @@ import pandas as pd
 def Comparer_Base_layout(app):
 
     app.title = "KBO analysis"
-    team_name = ['SSG','SK','기아','두산','한화','LG','삼성','키움','롯데', 'NC','KT']
+    team_name = ['SSG','SK','KIA','두산','한화','LG','삼성','키움','롯데', 'NC','KT']
     year = count_year()
     batter_name = []
     pitcher_name = []
