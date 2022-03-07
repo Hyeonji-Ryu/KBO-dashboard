@@ -22,7 +22,7 @@ You can see the dashboard that is updated the actual data [this page](http://kbo
 - Plotly
 
 ### 서버 (Server)
-- will be changed from AWS ec2 to AWS lightsail
+- AWS lightsail
 
 ### 데이터베이스 (Database)
 - mariaDB
